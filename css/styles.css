@@ -1,0 +1,41 @@
+*{
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body{
+    background-color: antiquewhite;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+#board{
+    background-color: black;
+}
+
+.gameOver{
+    display: none;
+}
+
+.gameOver.visible{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background: black;
+    color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+button{
+    padding: 12px 20px;
+    background-color: rgb(59, 57, 75);
+    color: rgb(255, 255, 255);
+    border-radius: 20px;
+    cursor: pointer;
+}
