@@ -35,12 +35,12 @@ let alienImgs = []; // Array de imágenes de alienígenas
 let alienRows = 2;
 let alienColumns = 3;
 let alienCount = 0;
-let alienVelocityX = 1;
+let alienVelocityX = 0.5; // Cambio: Velocidad inicial ajustada
+let alienDirection = 1; // Cambio: Variable para manejar la dirección de los alienígenas
 
 // Balas
 let bulletArray = [];
 let bulletVelocityY = -10;
-
 
 // Variables
 let score = 0;
@@ -48,10 +48,6 @@ let gameOver = false;
 let gamePaused = false;
 let gameStarted = false;
 let resetButton = document.getElementById("resetButton");
-
-
-
-
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -68,7 +64,6 @@ window.onload = function() {
     }
 
     // Añadir eventos a los botones
-    
     document.getElementById("startButton").addEventListener("click", startGame);
     document.getElementById("pauseButton").addEventListener("click", pauseGame);
 
@@ -109,18 +104,14 @@ function update() {
     context.drawImage(shipImg, ship.x, ship.y, shipWidth, shipHeight);
 
     // Dibuja y mueve alienígenas
+    let changeDirection = false; // Cambio: Bandera para cambio de dirección
     for (let i = 0; i < alienArray.length; i++) {
         let alien = alienArray[i];
         if (alien.alive) {
-            alien.x += alienVelocityX;
+            alien.x += alienVelocityX * alienDirection;
 
             if (alien.x + alien.width >= board.width || alien.x <= 0) {
-                alienVelocityX *= -1;
-                alien.x += alienVelocityX * 2;
-
-                for (let j = 0; j < alienArray.length; j++) {
-                    alienArray[j].y += alienHeight;
-                }
+                changeDirection = true;
             }
 
             context.drawImage(alien.img, alien.x, alien.y, alien.width, alien.height);
@@ -129,6 +120,14 @@ function update() {
                 gameOver = true;
                 perdiste();
             }
+        }
+    }
+
+    if (changeDirection) { // Cambio: Cambio de dirección y movimiento hacia abajo
+        alienDirection *= -1;
+        for (let i = 0; i < alienArray.length; i++) {
+            let alien = alienArray[i];
+            alien.y += alienHeight;
         }
     }
 
@@ -160,7 +159,8 @@ function update() {
     if (alienCount == 0) {
         alienColumns = Math.min(alienColumns + 1, columns / 2 - 2);
         alienRows = Math.min(alienRows + 1, rows - 4);
-        alienVelocityX += 1;
+        alienVelocityX += 0.5; // Cambio: Incremento más suave de la velocidad
+        bulletVelocityY -= 0.2; // Cambio: Aumento de la velocidad de las balas
         alienArray = [];
         bulletArray = [];
         createAliens();
@@ -231,7 +231,6 @@ function perdiste() {
     if (gameOver) {
         let gameOverElement = document.querySelector(".gameOver");
         gameOverElement.classList.add("visible");
-        
     }
 }
 
